@@ -1,0 +1,41 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "incrementality_wf",
+    "branch": "ccp-hybrid-version-change-incrementality",
+    "uniqueId": null,
+    "project": "CUSTOM_DS_WORKSPACE"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "2490"
+    },
+    {
+      "name": "start_date",
+      "value": "2025-07-29"
+    },
+    {
+      "name": "end_date",
+      "value": "2025-07-29"
+    },
+    {
+      "name": "retailer_id",
+      "value": "3"
+    }
+  ],
+  "clientName": "whitebridge",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "MEDIUM"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

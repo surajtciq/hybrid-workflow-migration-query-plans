@@ -1,0 +1,48 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "incrementality_wf_omni",
+    "branch": "hybrid-change-omni",
+    "uniqueId": null,
+    "project": "CUSTOM_DS_WORKSPACE"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "253"
+    },
+    {
+      "name": "start_date",
+      "value": "2025-07-13"
+    },
+    {
+      "name": "end_date",
+      "value": "2025-07-29"
+    },
+    {
+      "name": "retailer_id",
+      "value": "31"
+    },
+    {
+      "name": "retailer_name",
+      "value": "target_citrus"
+    }
+  ],
+  "clientName": "kellanova",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "MEDIUM"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": {
+    "temp_search_incrementality_report_generic": "target_ds",
+    "temp_campaign_incrementality_report_generic": "target_ds"
+  }
+}

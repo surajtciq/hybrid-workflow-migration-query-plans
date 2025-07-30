@@ -1,0 +1,29 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "keyword_classification_comp_name_classified",
+    "branch": "ccp-hybrid-version-change",
+    "uniqueId": null,
+    "project": "CUSTOM_AMS"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "5447"
+    }
+  ],
+  "clientName": "pcacompanies",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "SMALL"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

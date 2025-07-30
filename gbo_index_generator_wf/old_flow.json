@@ -1,0 +1,7 @@
+{
+  "taskList": [
+    "-- TASK 1 :: gbo_index_generator : Non-SQL Module or Empty SQL Module"
+  ],
+  "executionType": "TRIGGER",
+  "status": "ACCEPTED"
+}

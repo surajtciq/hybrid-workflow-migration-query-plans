@@ -1,0 +1,26 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "roi_ingestion_wf",
+    "branch": "ccp-hybrid-version-change-roi",
+    "uniqueId": null,
+    "project": "ESM_EDM_INGESTION"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "1520"
+    }
+  ],
+  "clientName": "kimberlyclarkrra",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": null,
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

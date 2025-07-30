@@ -1,0 +1,46 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "hourly_bidder_midnight_rollback_wf",
+    "branch": "hybrid-change",
+    "uniqueId": null,
+    "project": "hourly_bidder_ccp_project"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id_list",
+      "value": "1177"
+    },
+    {
+      "name": "client_name_list",
+      "value": "miele"
+    },
+    {
+      "name": "retailer",
+      "value": "amazon"
+    },
+    {
+      "name": "entity_type",
+      "value": "keyword"
+    },
+    {
+      "name": "orchestrator_execution_id",
+      "value": "11279864"
+    },
+    {
+      "name": "timezone",
+      "value": "US/Michigan"
+    }
+  ],
+  "clientName": "spinmaster",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": null,
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

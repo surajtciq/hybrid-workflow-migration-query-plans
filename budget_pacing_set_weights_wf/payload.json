@@ -1,0 +1,33 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "budget_pacing_set_weights_wf",
+    "branch": "ccp-hybrid-version-change",
+    "uniqueId": null,
+    "project": "CUSTOM_DS_WORKSPACE"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "4703"
+    },
+    {
+      "name": "rundate",
+      "value": "2025-07-30"
+    }
+  ],
+  "clientName": "funrise-it",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "MEDIUM"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

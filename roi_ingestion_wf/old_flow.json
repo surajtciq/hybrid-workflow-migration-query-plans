@@ -1,0 +1,7 @@
+{
+  "taskList": [
+    "-- TASK 1 :: roi_ingestion : Non-SQL Module or Empty SQL Module"
+  ],
+  "executionType": "TRIGGER",
+  "status": "ACCEPTED"
+}

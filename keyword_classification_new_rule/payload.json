@@ -1,0 +1,37 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "keyword_classification_new_rule",
+    "branch": "ccp-hybrid-version-change-2",
+    "uniqueId": null,
+    "project": "CUSTOM_AMS"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "851"
+    },
+    {
+      "name": "iteration_number",
+      "value": "1"
+    },
+    {
+      "name": "total_keywords_to_classify",
+      "value": "8000"
+    }
+  ],
+  "clientName": "hallmark",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "MEDIUM"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

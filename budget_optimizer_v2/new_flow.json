@@ -1,0 +1,11 @@
+{
+  "TASK_2__SQL_SEGMENT": [
+    {
+      "final_dummy_table_bo_v2": [
+        "DELETE FROM CLIENT_CATALOG.aramus_ds.error_logs where client_id=2489",
+        "INSERT INTO CLIENT_CATALOG.aramus_ds.error_logs (CLIENT_ID, WF_NAME, LEVEL, STATUS_CODE, MESSAGE, FEED_DATE, ADDITIONAL_INFO) SELECT NULL CLIENT_ID, id WF_NAME, NULL LEVEL, NULL STATUS_CODE, NULL MESSAGE, NULL FEED_DATE, NULL ADDITIONAL_INFO FROM CLIENT_VIEW_CATALOG.temp_ccp_2489.e0__bo_v2_python_output LIMIT 0"
+      ]
+    }
+  ],
+  "total_queries_count": 2
+}

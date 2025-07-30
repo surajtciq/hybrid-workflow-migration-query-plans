@@ -1,0 +1,45 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "incrementality_wf_walmart",
+    "branch": "ccp-hybrid-version-change-incrementality",
+    "uniqueId": null,
+    "project": "CUSTOM_DS_WORKSPACE"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "1032"
+    },
+    {
+      "name": "start_date",
+      "value": "2025-06-01"
+    },
+    {
+      "name": "end_date",
+      "value": "2025-06-30"
+    },
+    {
+      "name": "retailer_id",
+      "value": "4"
+    },
+    {
+      "name": "retailer_name",
+      "value": "amazon"
+    }
+  ],
+  "clientName": "spinmaster",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "MEDIUM"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

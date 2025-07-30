@@ -1,0 +1,30 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "hourly_bidder_midnight_rollback_orchestrator_wf",
+    "branch": "hybrid-change",
+    "uniqueId": null,
+    "project": "hourly_bidder_ccp_project"
+  },
+  "executionVariables": [
+    {
+      "name": "environment",
+      "value": "prod"
+    },
+    {
+      "name": "timezone",
+      "value": "US/Central"
+    }
+  ],
+  "clientName": "spinmaster",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": null,
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

@@ -1,0 +1,38 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "gbo_index_orchestrator_wf",
+    "branch": "ccp-hybrid-workflow-version-change",
+    "uniqueId": null,
+    "project": "gbo_index_python_workflow"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "1806"
+    },
+    {
+      "name": "retailer",
+      "value": "walmart"
+    },
+    {
+      "name": "run_date",
+      "value": "2025-07-18"
+    },
+    {
+      "name": "environment",
+      "value": "prod"
+    }
+  ],
+  "clientName": "zoetis",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": null,
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

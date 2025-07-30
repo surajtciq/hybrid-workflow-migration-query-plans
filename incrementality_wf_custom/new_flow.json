@@ -1,0 +1,31 @@
+{
+  "TASK_1__SQL_SEGMENT": [
+    {
+      "get_client_details_omni": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__get_client_details_omni",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__get_client_details_omni using delta TBLPROPERTIES ('delta.feature.allowColumnDefaults'='supported') AS SELECT 2025-07-13 AS start_date, 2025-07-29 AS end_date, 4919 AS client_id, 31 AS retailer_id, target_rms AS retailer_name"
+      ]
+    }
+  ],
+  "TASK_3__SQL_SEGMENT": [
+    {
+      "temp_incrementality_report_omni": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__temp_incrementality_report_omni",
+        "CREATE TABLE IF NOT EXISTS CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__temp_incrementality_report_omni (CLIENT_ID DECIMAL (38, 0), SEARCH STRING, PLACEMENT STRING, KEYWORD_TYPE STRING, REPORT_DATE DATE, CREATION_DATE TIMESTAMP DEFAULT CURRENT_TIMESTAMP, CAMPAIGN_ID VARCHAR (48), CAMPAIGN_NAME STRING, PORTFOLIO_ID DECIMAL (38, 0), PORTFOLIO_NAME STRING, PROFILE_ID DECIMAL (38, 0), PROFILE_NAME STRING, CAMPAIGN_TYPE STRING, TARGETING_TYPE STRING, REPORT_TYPE STRING, REPORT_CALCULATION_TYPE STRING, TOTAL_SPONSORED_POSITIONS DECIMAL (38, 0), TOTAL_SPONSORED_WEIGHT DECIMAL (38, 0), CLIENT_SPONSORED_POSITIONS DECIMAL (38, 0), CLIENT_SPONSORED_WEIGHT DECIMAL (38, 0), CLIENT_ORGANIC_POSITIONS DECIMAL (38, 0), CLIENT_ORGANIC_WEIGHT DECIMAL (38, 0), CLICKS DECIMAL (38, 0), IMPRESSIONS DECIMAL (38, 0), COST DECIMAL (38, 4), ATTRIBUTEDSALES14D DECIMAL (38, 4), ROAS DECIMAL (38, 4), INCREMENTAL_FRACTION DECIMAL (38, 4), INCREMENTAL_FRACTION_BAND STRING, INCREMENTAL_SALES DECIMAL (38, 4), IROAS DECIMAL (38, 4), COVERAGE DECIMAL (38, 4), COVERAGE_TYPE STRING, CAMPAIGN_NAME_TOP_1 STRING, CAMPAIGN_NAME_TOP_2 STRING, CAMPAIGN_NAME_TOP_3 STRING, CAMPAIGN_ID_TOP_1 STRING, CAMPAIGN_ID_TOP_2 STRING, CAMPAIGN_ID_TOP_3 STRING, PORTFOLIO_NAME_TOP_1 STRING, PORTFOLIO_NAME_TOP_2 STRING, PORTFOLIO_NAME_TOP_3 STRING, PORTFOLIO_ID_TOP_1 STRING, PORTFOLIO_ID_TOP_2 STRING, PORTFOLIO_ID_TOP_3 STRING, PROFILE_NAME_TOP_1 STRING, PROFILE_NAME_TOP_2 STRING, PROFILE_NAME_TOP_3 STRING, PROFILE_ID_TOP_1 STRING, PROFILE_ID_TOP_2 STRING, PROFILE_ID_TOP_3 STRING, ADDITIONAL_INFO STRING) TBLPROPERTIES ('delta.feature.allowColumnDefaults'='supported')",
+        "DELETE FROM CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__temp_incrementality_report_omni WHERE (report_date BETWEEN 2025-07-13 AND 2025-07-29 AND client_id = 4919 AND get_json_object(additional_info, '$.retailer_id') = 31) OR report_date IS NULL OR client_id IS NULL",
+        "INSERT INTO CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__temp_incrementality_report_omni SELECT CLIENT_ID, SEARCH, PLACEMENT, KEYWORD_TYPE, REPORT_DATE, CREATION_DATE, CAMPAIGN_ID, CAMPAIGN_NAME, PORTFOLIO_ID, PORTFOLIO_NAME, PROFILE_ID, PROFILE_NAME, 'Open Auction' AS campaign_type, CAST(NULL AS string) AS TARGETING_TYPE, REPORT_TYPE, REPORT_CALCULATION_TYPE, TOTAL_SPONSORED_POSITIONS, TOTAL_SPONSORED_WEIGHT, CLIENT_SPONSORED_POSITIONS, CLIENT_SPONSORED_WEIGHT, CLIENT_ORGANIC_POSITIONS, CLIENT_ORGANIC_WEIGHT, CLICKS, IMPRESSIONS, COST, ATTRIBUTEDSALES14D, ROAS, INCREMENTAL_FRACTION, INCREMENTAL_FRACTION_BAND, INCREMENTAL_SALES, IROAS, COVERAGE, COVERAGE_TYPE, CAMPAIGN_NAME_TOP_1, CAMPAIGN_NAME_TOP_2, CAMPAIGN_NAME_TOP_3, CAMPAIGN_ID_TOP_1, CAMPAIGN_ID_TOP_2, CAMPAIGN_ID_TOP_3, PORTFOLIO_NAME_TOP_1, PORTFOLIO_NAME_TOP_2, PORTFOLIO_NAME_TOP_3, PORTFOLIO_ID_TOP_1, PORTFOLIO_ID_TOP_2, PORTFOLIO_ID_TOP_3, PROFILE_NAME_TOP_1, PROFILE_NAME_TOP_2, PROFILE_NAME_TOP_3, PROFILE_ID_TOP_1, PROFILE_ID_TOP_2, PROFILE_ID_TOP_3, client_view_catalog.modulus_1611.object_construct(array('retailer_id', STRING(31))) AS additional_info FROM CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__incrementality_python_omni WHERE NOT client_id IS NULL AND NOT report_date IS NULL"
+      ]
+    },
+    {
+      "temp_search_incrementality_report_custom": [
+        "DELETE FROM CLIENT_CATALOG.output_module_schema_temp_search_incrementality_report_custom.search_incrementality_report WHERE client_id = 4919 AND TO_DATE(report_date) BETWEEN 2025-07-13 AND 2025-07-29",
+        "INSERT INTO CLIENT_CATALOG.output_module_schema_temp_search_incrementality_report_custom.search_incrementality_report SELECT client_id, search, keyword_type, report_date, creation_date, campaign_type, targeting_type, report_type, report_calculation_type, total_sponsored_positions, total_sponsored_weight, client_sponsored_positions, client_sponsored_weight, client_organic_positions, client_organic_weight, clicks, impressions, cost, attributedsales14d, roas, incremental_fraction, incremental_fraction_band, incremental_sales, iroas, campaign_name_top_1, campaign_name_top_2, campaign_name_top_3, campaign_id_top_1, campaign_id_top_2, campaign_id_top_3, portfolio_name_top_1, portfolio_name_top_2, portfolio_name_top_3, portfolio_id_top_1, portfolio_id_top_2, portfolio_id_top_3, profile_name_top_1, profile_name_top_2, profile_name_top_3, profile_id_top_1, profile_id_top_2, profile_id_top_3, additional_info FROM CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__temp_incrementality_report_omni WHERE report_type = 'search' AND client_id = 4919"
+      ],
+      "temp_campaign_incrementality_report_custom": [
+        "DELETE FROM CLIENT_CATALOG.output_module_schema_temp_campaign_incrementality_report_custom.campaign_incrementality_report WHERE client_id = 4919 AND TO_DATE(report_date) BETWEEN 2025-07-13 AND 2025-07-29",
+        "INSERT INTO CLIENT_CATALOG.output_module_schema_temp_campaign_incrementality_report_custom.campaign_incrementality_report SELECT client_id, keyword_type, report_date, creation_date, campaign_id, campaign_name, portfolio_id, portfolio_name, profile_id, profile_name, campaign_type, targeting_type, report_type, report_calculation_type, clicks, impressions, cost, attributedsales14d, roas, incremental_fraction, incremental_fraction_band, incremental_sales, iroas, coverage, coverage_type, additional_info FROM CLIENT_VIEW_CATALOG.temp_ccp_4919.e0__temp_incrementality_report_omni WHERE report_type = 'campaign'"
+      ]
+    }
+  ],
+  "total_queries_count": 10
+}

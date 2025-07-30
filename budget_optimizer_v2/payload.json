@@ -1,0 +1,45 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "budget_optimizer_v2",
+    "branch": "ccp_hybrid_version_change",
+    "uniqueId": null,
+    "project": "budget_optimiser_v2_python_workflow"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "2489"
+    },
+    {
+      "name": "run_date",
+      "value": "2025-07-29"
+    },
+    {
+      "name": "retailer_id",
+      "value": "4"
+    },
+    {
+      "name": "execution_type",
+      "value": "TRIGGER"
+    },
+    {
+      "name": "snowflake_env",
+      "value": "prod"
+    }
+  ],
+  "clientName": "ashleyfurniture",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "MEDIUM"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}
