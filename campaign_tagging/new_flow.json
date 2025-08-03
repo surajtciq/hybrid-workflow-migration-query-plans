@@ -1,0 +1,57 @@
+{
+  "TASK_1__SQL_SEGMENT": [
+    {
+      "all_available_campaigns": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__all_available_campaigns",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__all_available_campaigns AS SELECT DISTINCT client_id, report_date, CAST(campaign_id AS STRING) AS campaign_id, campaign_type, targeting_type, state, serving_status, start_date, end_date, daily_budget FROM CLIENT_CATALOG.ams_cubes.campaigns_campaign_workbench WHERE client_id = 5121 AND report_date BETWEEN DATEADD(year, -2, :feed_date) AND :feed_date UNION ALL (SELECT NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL)"
+      ]
+    },
+    {
+      "sales_data_last_90_days": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_data_last_90_days",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_data_last_90_days AS SELECT t1.client_id, report_date, campaign_id, LAST_VALUE(campaign_name) OVER (PARTITION BY campaign_id ORDER BY report_date NULLS LAST) AS campaign_name, t1.keyword_text, UPPER(match_type) AS match_type, brand, UPPER(t1.keyword_type) AS keyword_type, ATTRIBUTEDSALES14D, spend FROM CLIENT_CATALOG.ams_cubes.keyword_campaigns_workbench_v2 AS t1 INNER JOIN CLIENT_CATALOG.ams_recommendations.keyword_classification AS t2 ON t1.keyword_text = t2.keyword_text AND t1.client_id = t2.client_id WHERE report_date BETWEEN DATEADD(year, -2, :feed_date) AND :feed_date AND campaign_id IN (SELECT DISTINCT (campaign_id) FROM (SELECT campaign_id, SUM(ATTRIBUTEDSALES14D) AS SUM_ATTRIBUTEDSALES14D, SUM(spend) AS SUM_SPEND FROM CLIENT_CATALOG.ams_cubes.keyword_campaigns_workbench_v2 WHERE report_date BETWEEN DATEADD(year, -2, :feed_date) AND :feed_date GROUP BY campaign_id HAVING SUM_ATTRIBUTEDSALES14D > 0.0 AND SUM_SPEND > 0.0)) AND t1.client_id = 5121 AND match_type IN ('broad', 'phrase', 'exact') AND campaign_id IN (SELECT campaign_id FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__all_available_campaigns)"
+      ]
+    },
+    {
+      "sales_by_keyword_type": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_keyword_type",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_keyword_type AS SELECT client_id, campaign_id, campaign_name, keyword_type, SUM(ATTRIBUTEDSALES14D) AS sales FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_data_last_90_days GROUP BY client_id, campaign_id, campaign_name, keyword_type"
+      ]
+    },
+    {
+      "max_sales_by_keyword_type": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__max_sales_by_keyword_type",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__max_sales_by_keyword_type AS (SELECT t1.client_id, t1.campaign_id, t1.keyword_type, t2.max_sales, replace(t1.campaign_name, '|', '@^') AS campaign_name FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_keyword_type t1 RIGHT JOIN (SELECT client_id, campaign_id, max(sales) max_sales, campaign_name FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_keyword_type GROUP BY client_id, campaign_id, campaign_name) t2 ON t1.campaign_id = t2.campaign_id AND t1.sales = t2.max_sales AND t1.client_id = t2.client_id ORDER BY campaign_id) UNION ALL SELECT -1, -1, 'invalid', -1, 'invalid'"
+      ]
+    }
+  ],
+  "TASK_3__SQL_SEGMENT": [
+    {
+      "sales_by_match_type": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_match_type",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_match_type AS SELECT t1.client_id, t1.campaign_id, t1.match_type, SUM(t1.ATTRIBUTEDSALES14D) AS sales FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_data_last_90_days AS t1 INNER JOIN CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__max_sales_by_keyword_type_python AS t2 ON t1.campaign_id = t2.campaign_id AND t1.keyword_type = t2.keyword_type AND t1.client_id = t2.client_id GROUP BY t1.client_id, t1.campaign_id, t1.match_type ORDER BY t1.campaign_id NULLS LAST"
+      ],
+      "keyword_spend_distribution": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__keyword_spend_distribution",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__keyword_spend_distribution AS SELECT client_id, campaign_id, to_json(named_struct('GENERIC', GENERIC, 'CLIENT_BRANDED', CLIENT_BRANDED, 'COMPETITOR_BRANDED', COMPETITOR_BRANDED)) AS keyword_spend_distribution FROM (SELECT client_id, campaign_id, SUM(GENERIC) AS GENERIC, SUM(CLIENT_BRANDED) AS CLIENT_BRANDED, SUM(COMPETITOR_BRANDED) AS COMPETITOR_BRANDED FROM (SELECT client_id, campaign_id, CASE WHEN keyword_type = 'GENERIC' THEN sales ELSE 0 END AS GENERIC, CASE WHEN keyword_type = 'CLIENT_BRANDED' THEN sales ELSE 0 END AS CLIENT_BRANDED, CASE WHEN keyword_type = 'COMPETITOR_BRANDED' THEN sales ELSE 0 END AS COMPETITOR_BRANDED FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_keyword_type) GROUP BY client_id, campaign_id)"
+      ]
+    },
+    {
+      "match_spend_distribution": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__match_spend_distribution",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__match_spend_distribution AS SELECT client_id, campaign_id, to_json(named_struct('exact', EXACT, 'phrase', PHRASE, 'broad', BROAD)) AS match_spend_distribution FROM (SELECT client_id, campaign_id, SUM(EXACT) AS EXACT, SUM(PHRASE) AS PHRASE, SUM(BROAD) AS BROAD FROM (SELECT client_id, campaign_id, CASE WHEN match_type = 'EXACT' THEN sales ELSE 0 END AS EXACT, CASE WHEN match_type = 'PHRASE' THEN sales ELSE 0 END AS PHRASE, CASE WHEN match_type = 'BROAD' THEN sales ELSE 0 END AS BROAD FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_match_type) GROUP BY client_id, campaign_id)"
+      ],
+      "max_sales_by_match_type": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__max_sales_by_match_type",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__max_sales_by_match_type AS SELECT t1.client_id, t1.campaign_id, t1.match_type FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_match_type AS t1 RIGHT JOIN (SELECT client_id, campaign_id, MAX(sales) AS max_sales FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__sales_by_match_type GROUP BY client_id, campaign_id) AS t2 ON t1.campaign_id = t2.campaign_id AND t1.sales = t2.max_sales AND t1.client_id = t2.client_id"
+      ]
+    },
+    {
+      "ams_campaign_tags": [
+        "DELETE FROM CLIENT_CATALOG.aramus_ds.ams_campaign_tags WHERE feed_date = :feed_date AND client_id = 5121",
+        "INSERT INTO CLIENT_CATALOG.aramus_ds.ams_campaign_tags (SELECT :feed_date AS feed_date, t1.client_id, CASE WHEN CAST(t1.campaign_id AS DECIMAL (38, 0)) = -1 THEN 'invalid' ELSE CAST(t1.campaign_id AS STRING) END AS campaign_id, t1.keyword_type, t2.match_type, t3.keyword_spend_distribution, t4.match_spend_distribution FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__max_sales_by_keyword_type_python AS t1 INNER JOIN CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__max_sales_by_match_type AS t2 INNER JOIN CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__keyword_spend_distribution AS t3 INNER JOIN CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__match_spend_distribution AS t4 ON t1.campaign_id = t2.campaign_id AND t2.campaign_id = t3.campaign_id AND t3.campaign_id = t4.campaign_id AND t1.client_id = t2.client_id AND t2.client_id = t3.client_id AND t3.client_id = t4.client_id)"
+      ]
+    }
+  ],
+  "total_queries_count": 18
+}

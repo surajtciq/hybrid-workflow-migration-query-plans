@@ -1,0 +1,41 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "alert_actions_trigger_wf",
+    "branch": "ccp-hybrid-alert-actions-version-change",
+    "uniqueId": null,
+    "project": "CUSTOM_AMS_CUBES"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "851"
+    },
+    {
+      "name": "retailer",
+      "value": "amazon"
+    },
+    {
+      "name": "env",
+      "value": "prod"
+    },
+    {
+      "name": "feed_date",
+      "value": "2025-08-02"
+    }
+  ],
+  "clientName": "hallmark",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "MEDIUM"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

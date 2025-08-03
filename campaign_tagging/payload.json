@@ -1,0 +1,37 @@
+{
+  "userName": null,
+  "warehouseConfig": null,
+  "executionEntityInfo": {
+    "name": "campaign_tagging",
+    "branch": "ccp-hybrid-campaign-tagging-version-change",
+    "uniqueId": null,
+    "project": "CUSTOM_DS_WORKSPACE"
+  },
+  "executionVariables": [
+    {
+      "name": "client_id",
+      "value": "5121"
+    },
+    {
+      "name": "clientdetailsid",
+      "value": "5121"
+    },
+    {
+      "name": "rundate",
+      "value": "2025-08-03"
+    }
+  ],
+  "clientName": "hills-ca",
+  "sparkConfig": {
+    "sparkSubmitConfig": null,
+    "databricksClusterSpecification": null,
+    "existingClusterId": null
+  },
+  "snowparkConfig": null,
+  "sqlConfig": {
+    "executionTimeoutSeconds": null,
+    "size": "MEDIUM"
+  },
+  "isTriggerPlan": true,
+  "outputSchemaMap": null
+}

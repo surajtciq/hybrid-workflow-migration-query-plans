@@ -1,0 +1,13 @@
+{
+  "taskList": [
+    "-- TASK 1 :: get_similar_campaigns : DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__get_similar_campaigns",
+    "-- TASK 2 :: get_similar_campaigns : CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__get_similar_campaigns AS SELECT client_id, CAST(a_campaign_id AS STRING) AS a_campaign_id, a_asin_count, CAST(b_campaign_id AS STRING) AS b_campaign_id, b_asin_count, array_similarity_score FROM CLIENT_VIEW_CATALOG.aramus_ds.ams_campaign_similarity WHERE client_id = 5121 AND feed_date = (SELECT MAX(feed_date) FROM CLIENT_VIEW_CATALOG.aramus_ds.ams_campaign_similarity WHERE client_id = 5121) UNION ALL (SELECT NULL, NULL, NULL, NULL, NULL, NULL)",
+    "-- TASK 3 :: get_campaign_tags : DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__get_campaign_tags",
+    "-- TASK 4 :: get_campaign_tags : CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__get_campaign_tags AS SELECT client_id, CAST(campaign_id AS STRING) AS campaign_id, keyword_type, match_type FROM CLIENT_VIEW_CATALOG.aramus_ds.ams_campaign_tags WHERE client_id = 5121 AND feed_date = (SELECT MAX(feed_date) FROM CLIENT_VIEW_CATALOG.aramus_ds.ams_campaign_tags WHERE client_id = 5121) UNION ALL (SELECT -1, '11111', 'GENERIC', 'EXACT')",
+    "-- TASK 5 :: campaign_network_python_output : Non-SQL Module or Empty SQL Module",
+    "-- TASK 6 :: ams_campaign_network : DELETE FROM CLIENT_CATALOG.aramus_ds.ams_campaign_network WHERE client_id = 5121 AND feed_date = '2025-08-03'",
+    "-- TASK 7 :: ams_campaign_network : INSERT INTO CLIENT_CATALOG.aramus_ds.ams_campaign_network (SELECT '2025-08-03' AS feed_date, 5121 AS client_id, campaign_id, SPLIT(generic_exact, ',') AS generic_exact, SPLIT(generic_phrase, ',') AS generic_phrase, SPLIT(generic_broad, ',') AS generic_broad, SPLIT(client_exact, ',') AS client_exact, SPLIT(client_phrase, ',') AS client_phrase, SPLIT(client_broad, ',') AS client_broad, SPLIT(competitor_exact, ',') AS competitor_exact, SPLIT(competitor_phrase, ',') AS competitor_phrase, SPLIT(competitor_broad, ',') AS competitor_broad FROM CLIENT_VIEW_CATALOG.temp_ccp_5121.e0__campaign_network_python_output)"
+  ],
+  "executionType": "TRIGGER",
+  "status": "ACCEPTED"
+}
