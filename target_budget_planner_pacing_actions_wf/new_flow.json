@@ -1,0 +1,65 @@
+{
+  "TASK_1__SQL_SEGMENT": [
+    {
+      "budget_version_payload_latest_target": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__budget_version_payload_latest_target",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_843.e0__budget_version_payload_latest_target AS (SELECT client_id, plan_version_id, REPLACE(payload, '|', '-') AS payload, creation_time FROM (SELECT * FROM CLIENT_CATALOG.target_ds.budget_version_payload WHERE client_id = 843) WHERE creation_time = (SELECT MAX(creation_time) FROM CLIENT_CATALOG.target_ds.budget_version_payload WHERE client_id = 843 AND YEAR(creation_time) = YEAR(TO_DATE(2025-08-03))) LIMIT 1) UNION ALL SELECT '-1' AS client_id, '-1' AS plan_version_id, CAST(NULL AS string) AS payload, '1970-1-1' AS creation_time"
+      ],
+      "retailer_info": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__retailer_info",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_843.e0__retailer_info AS (SELECT target AS retailer_name)"
+      ],
+      "plan_created_check_target": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__plan_created_check_target",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_843.e0__plan_created_check_target AS SELECT 843 AS client_id, COUNT(*) AS no_of_plans FROM CLIENT_CATALOG.target_ds.budget_version_payload WHERE client_id = 843 AND YEAR(TO_DATE(2025-08-03)) = YEAR(creation_time)"
+      ]
+    }
+  ],
+  "TASK_3__SQL_SEGMENT": [
+    {
+      "budget_pacing_set_weights_table_latest_target": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__budget_pacing_set_weights_table_latest_target",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_843.e0__budget_pacing_set_weights_table_latest_target AS (SELECT client_id, creation_date, entity_type, entity_id, related_entity_id, related_entity_type, week_number, month_number, feed_date, day_weight FROM CLIENT_CATALOG.target_ds.budget_pacing_set_weights_table WHERE client_id = 843 AND creation_date = (SELECT MAX(creation_date) FROM CLIENT_CATALOG.target_ds.budget_pacing_set_weights_table WHERE client_id = 843)) UNION ALL (SELECT '-1', '1970-1-1', '-1', '-1', '-1', '-1', 0, 0, '1970-1-1', 0)"
+      ]
+    },
+    {
+      "user_budget_plan_target": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_target",
+        "CREATE TABLE IF NOT EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_target (client_id STRING, plan_version_id STRING, creation_time TIMESTAMP, feed_date DATE, budget_type STRING, entity_type STRING, entity_id STRING, entity_name STRING, related_entity_type STRING, related_entity_id STRING, related_entity_name STRING, label STRING, start_date DATE, end_date DATE, planned_budget DECIMAL (38, 10), month_number DECIMAL (5, 0), year_number DECIMAL (5, 0), additional_info STRING)",
+        "DELETE FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_target WHERE (feed_date < DATEADD(day, -31, 2025-08-03) OR feed_date = 2025-08-03) AND client_id = 843",
+        "INSERT INTO CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_target (SELECT 843 AS client_id, CAST(NULL AS string) AS plan_version_id, CAST(NULL AS timestamp) AS creation_time, 2025-08-03 AS feed_date, budget_type, entity_type, CASE WHEN LOWER(entity_id) = 'rest' THEN '' ELSE entity_id END AS entity_id, CAST(NULL AS string) AS entity_name, related_entity_type, related_entity_id, CAST(NULL AS string) AS related_entity_name, label, start_date, end_date, planned_budget, month_number, year_number, to_json(named_struct('monthly_budget', monthly_budget, 'dates', dates)) AS additional_info FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_python_target)"
+      ]
+    }
+  ],
+  "TASK_5__SQL_SEGMENT": [
+    {
+      "plan_before_date_target": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__plan_before_date_target",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_843.e0__plan_before_date_target AS (SELECT feed_date, CASE WHEN entity_id IS NULL AND entity_type = 'PORTFOLIO' THEN 'REST' ELSE entity_id END AS entity_id, entity_type, related_entity_id, related_entity_type, planned_budget AS day_budget FROM CLIENT_CATALOG.target_ds.budget_plan WHERE client_id = 843 AND feed_date < 2025-08-03)"
+      ],
+      "entity_id_name_map_target": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__entity_id_name_map_target",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_843.e0__entity_id_name_map_target AS (SELECT DISTINCT (CAST(brand_id AS STRING)) AS entity_id, brand_name AS entity_name, 'PROFILE' AS entity_type FROM CLIENT_CATALOG.target_cubes.brands_catalog WHERE client_id = 843 GROUP BY CAST(brand_id AS STRING), entity_name) UNION (SELECT CAST(843 AS STRING) AS entity_id, NULL AS entity_name, 'ENTIRE_BUSINESS' AS entity_type)"
+      ],
+      "budget_plan_till_yesterday_target": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__budget_plan_till_yesterday_target",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_843.e0__budget_plan_till_yesterday_target AS SELECT entity_id, entity_type, related_entity_id, related_entity_type, feed_date, planned_budget FROM (SELECT * FROM CLIENT_CATALOG.target_ds.budget_plan WHERE client_id = 843) WHERE feed_date < 2025-08-03 AND MONTH(feed_date) = MONTH(TO_DATE(2025-08-03)) UNION ALL SELECT '-1', '-1', '-1', '-1', '1970-1-1', 0"
+      ]
+    },
+    {
+      "user_budget_plan_current_month_onwards_target": [
+        "DROP TABLE IF EXISTS CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_current_month_onwards_target",
+        "CREATE TABLE CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_current_month_onwards_target AS SELECT client_id, feed_date, budget_type, entity_type, entity_id, related_entity_id, related_entity_type, label, start_date, end_date, planned_budget, month_number, year_number, get_json_object(additional_info, '$.monthly_budget') AS monthly_budget, get_json_object(additional_info, '$.dates') AS dates FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_target WHERE month_number >= MONTH(TO_DATE(2025-08-03)) AND feed_date = (SELECT MAX(feed_date) FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__user_budget_plan_target WHERE client_id = 843) AND client_id = 843 UNION ALL SELECT '-1', '1970-1-1', '-1', '-1', '-1', '-1', '-1', '-1', '1970-1-1', '1970-1-1', 0, 0, 0, CAST(NULL AS string), CAST(NULL AS string)"
+      ]
+    }
+  ],
+  "TASK_7__SQL_SEGMENT": [
+    {
+      "budget_plan_insertion_module_target": [
+        "DELETE FROM CLIENT_CATALOG.target_ds.budget_plan WHERE client_id = 843",
+        "INSERT INTO CLIENT_CATALOG.target_ds.budget_plan (SELECT 843 AS client_id, (SELECT plan_version_id FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__budget_version_payload_latest_target WHERE client_id = 843) AS plan_version_id, 2025-08-03 AS creation_time, CASE WHEN tab1.entity_id = 'REST' THEN NULL ELSE tab1.entity_id END AS entity_id, CASE WHEN tab1.entity_id = 'REST' THEN 'Rest' ELSE tab1.entity_name END AS entity_name, tab1.entity_type, tab1.related_entity_id, tab2.related_entity_name, tab1.related_entity_type, DATE_PART('week', tab1.feed_date) AS week_number, DATE_PART('month', tab1.feed_date) AS month_number, tab1.feed_date, tab1.day_budget AS planned_budget, CAST('{}' AS string) AS additional_info, 'PACING' AS plan_type FROM (SELECT feed_date, t1.entity_id, t1.entity_type, t2.entity_name, related_entity_id, related_entity_type, day_budget FROM (SELECT feed_date, entity_id, entity_type, CASE WHEN related_entity_id = '' THEN NULL ELSE related_entity_id END AS related_entity_id, CASE WHEN related_entity_type = '' THEN NULL ELSE related_entity_type END AS related_entity_type, day_budget FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__budget_pacing_python_json_parser_target UNION ALL SELECT feed_date, entity_id, entity_type, related_entity_id, related_entity_type, day_budget FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__plan_before_date_target) AS t1 LEFT JOIN (SELECT entity_id, entity_name, entity_type FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__entity_id_name_map_target) AS t2 ON (t1.entity_id = t2.entity_id AND t1.entity_type = t2.entity_type)) AS tab1 LEFT JOIN (SELECT entity_id, entity_name AS related_entity_name, entity_type FROM CLIENT_VIEW_CATALOG.temp_ccp_843.e0__entity_id_name_map_target) AS tab2 ON (tab1.related_entity_id = tab2.entity_id AND tab1.related_entity_type = tab2.entity_type))"
+      ]
+    }
+  ],
+  "total_queries_count": 22
+}
